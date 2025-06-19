@@ -134,7 +134,7 @@ Output:
 ansible-playbook -i /inventory/inventory.ini cluster.yml --become --ask-pass --ask-become-pass
 ```
 
-Enter SSH password if any or enter if step 2 has been performed.
+Enter SSH password if any or press enter if step 2 has been performed. Then enter password to access sudo
 
 A full deployment on two small VMs typically takes 10 – 15 min.
 No task should end in FAILED. If you see failures, re‑run after fixing the cause; Kubespray is idempotent.
@@ -215,3 +215,11 @@ output:
 <p align="center">
   <img src="assets\step9-2.png" alt="step9-2.png" width="600"/>
 </p>
+
+# Reference
+
+---
+
+1. 🔗 [Kubespray](https://kubespray.io)
+2. 📖 [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
+3. 📄 Installation documents của mentor Nguyễn Ngọc Dũng _(bổ sung link nếu có)_
