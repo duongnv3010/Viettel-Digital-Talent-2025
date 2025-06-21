@@ -222,4 +222,4 @@ output:
 
 1. 🔗 [Kubespray](https://kubespray.io)
 2. 📖 [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
-3. 📄 Installation documents của mentor Nguyễn Ngọc Dũng _(bổ sung link nếu có)_
+3. 📄 Installation documents của mentor Nguyễn Ngọc Dũng
