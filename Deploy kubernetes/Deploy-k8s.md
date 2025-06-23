@@ -4,11 +4,11 @@
 
 ## 0. Topology
 
-| Hostname    | Role(s)                                       | vCPU / RAM (min) | OS (tested)       | SSH Port |
-| ----------- | --------------------------------------------- | ---------------- | ----------------- | -------- |
-| **ansible** | Control node: runs Ansible, Docker, Kubespray | 2 vCPU / 4 GiB   | Ubuntu 24.04 LTS+ | _custom_ |
-| **master1** | `kube‑control‑plane`, `etcd`                  | 2 vCPU / 4 GiB   | Ubuntu 24.04 LTS+ | _custom_ |
-| **worker1** | `kube‑node`                                   | 2 vCPU / 4 GiB   | Ubuntu 24.04 LTS+ | _custom_ |
+| Hostname    | Role(s)                                       | vCPU / RAM (min) | OS (tested)       |
+| ----------- | --------------------------------------------- | ---------------- | ----------------- |
+| **ansible** | Control node: runs Ansible, Docker, Kubespray | 2 vCPU / 4 GiB   | Ubuntu 24.04 LTS+ |
+| **master1** | `kube‑control‑plane`, `etcd`                  | 2 vCPU / 4 GiB   | Ubuntu 24.04 LTS+ |
+| **worker1** | `kube‑node`                                   | 2 vCPU / 4 GiB   | Ubuntu 24.04 LTS+ |
 
 ---
 

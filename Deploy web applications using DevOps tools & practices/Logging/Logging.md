@@ -119,13 +119,59 @@ spec:
 
 - **kibana-deployment.yaml**:
 
-```
-
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana
+  namespace: logging
+spec:
+  type: NodePort
+  selector:
+    app: kibana
+  ports:
+    - port: 5601
+      targetPort: 5601
+      nodePort: 30020
+      name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+  namespace: logging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: master1
+      tolerations:
+        - key: "node-role.kubernetes.io/master"
+          operator: "Exists"
+          effect: "NoSchedule"
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+      containers:
+        - name: kibana
+          image: docker.elastic.co/kibana/kibana:7.17.0
+          env:
+            - name: ELASTICSEARCH_HOSTS
+              value: http://elasticsearch.logging.svc.cluster.local:9200
+          ports:
+            - containerPort: 5601
 ```
 
 ## 6. Cấu hình Fluentd
 
-### 6.1 ConfigMap `fluentd-configmap.yaml`:
+- ConfigMap `fluentd-configmap.yaml`:
 
 ```yaml
 apiVersion: v1
@@ -177,7 +223,7 @@ data:
     </match>
 ```
 
-### 6.2 DaemonSet `fluentd-daemonset.yaml`:
+- DaemonSet `fluentd-daemonset.yaml`:
 
 ```yaml
 apiVersion: apps/v1
