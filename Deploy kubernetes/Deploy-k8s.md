@@ -2,7 +2,7 @@
 
 ---
 
-## 0. Topology & Requirements
+## 0. Topology
 
 | Hostname    | Role(s)                                       | vCPU / RAM (min) | OS (tested)       | SSH Port |
 | ----------- | --------------------------------------------- | ---------------- | ----------------- | -------- |
@@ -12,7 +12,7 @@
 
 ---
 
-## 1. Prepare the Ansible Control Node
+## 1. Chuẩn bị cho node ansible
 
 ```bash
 # On the ansible host
@@ -23,11 +23,11 @@ pip3 install --user ansible-core==2.15  # Kubespray ≥2.28 needs Ansible 2.15+
 sudo apt install -y docker.io
 ```
 
-## 2. Setup SSH key on all node
+## 2. Setup SSH key trên các node
 
-1. Use the ssh-keygen command to generate a public and private authentication key pair
+1. Sử dụng ssh-keygen để tạo cặp khóa public/private key
 
-```
+```bash
 ssh-keygen -t rsa
 ```
 
@@ -37,13 +37,13 @@ output:
   <img src="assets\step2-1.png" alt="step2-1.png" width="600"/>
 </p>
 
-2. Copy key to remaining nodes
+2. Copy key đến các node còn lại
 
-```
+```bash
 ssh-copy-id user@server1
 ```
 
-Replace user@server1 with real user and IP
+Thay thế `user@server1` với user và ip thực tế của các node
 
 Output:
 
@@ -67,12 +67,10 @@ Output:
 
 ## 3. Get Kubespray
 
-```
-
+```bash
 cd ~
 git clone https://github.com/kubernetes-sigs/kubespray.git
 cd kubespray
-
 ```
 
 Output:
@@ -81,17 +79,15 @@ Output:
   <img src="assets\step3.png" alt="step3.png" width="600"/>
 </p>
 
-## 4. Launch the Kubespray utility container (recommended)
+## 4. Chạy cài đặt Kubespray
 
-```
-
+```bash
 docker run --rm -it \
  --mount type=bind,source="$(pwd)"/inventory/sample,dst=/inventory \
   --mount type=bind,source="$HOME"/.ssh/id_rsa,dst=/root/.ssh/id_rsa \
  quay.io/kubespray/kubespray:v2.28.0 bash
 
 # We are now inside the container shell at /kubespray
-
 ```
 
 output:
@@ -100,12 +96,13 @@ output:
   <img src="assets\step4.png" alt="step4.png" width="600"/>
 </p>
 
-## 5. Edit inventory file
+## 5. Sửa inventory file
 
-Edit content in /inventory/inventory.ini\
-Example inventory.ini:
+Edit `/inventory/inventory.ini`
 
-```
+Ví dụ `inventory.ini`:
+
+```ini
 
 [kube_control_plane]
 master1 ansible_host=<MASTER_IP> ansible_port=<MASTER_SSH_PORT> ansible_user=<ssh_user>
@@ -128,16 +125,16 @@ Output:
   <img src="assets\step5.png" alt="step5.png" width="600"/>
 </p>
 
-## 6. Run the Ansible Playbook
+## 6. Chạy Ansible Playbook
 
 ```
 ansible-playbook -i /inventory/inventory.ini cluster.yml --become --ask-pass --ask-become-pass
 ```
 
-Enter SSH password if any or press enter if step 2 has been performed. Then enter password to access sudo
+Nhập mật khẩu SSH nếu có hoặc nhấn enter nếu đã thực hiện bước 2. Sau đó nhập mật khẩu để truy cập `sudo`
 
-A full deployment on two small VMs typically takes 10 – 15 min.
-No task should end in FAILED. If you see failures, re‑run after fixing the cause; Kubespray is idempotent.
+Việc triển khai đầy đủ trên hai máy ảo nhỏ thường mất 10–15 phút.
+Không có tác vụ nào kết thúc bằng `FAILED`. Nếu có thấy lỗi, hãy chạy lại sau khi khắc phục nguyên nhân
 
 Output:
 
@@ -145,9 +142,9 @@ Output:
   <img src="assets\step6.png" alt="step6.png" width="600"/>
 </p>
 
-## 7. Install Kubectl on Ansible Node
+## 7. Cài đặt Kubectl trên Ansible Node
 
-```
+```bash
 curl -LO "https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 ```
@@ -160,21 +157,21 @@ Output:
 
 ## 8. Kubeconfig configuration
 
-On Master1 Node
+Trên node `master1`
 
-```
+```bash
 sudo cat /etc/kubernetes/admin.conf
 ```
 
-Copy that content to the ansible machine, paste it into the file named k8s-config.yaml. Then edit the line:
+Sao chép nội dung đó vào máy ansible, dán vào tệp có tên k8s-config.yaml. Sau đó chỉnh sửa dòng:
 
-```
+```bash
 server: https://127.0.0.1:6443
 ```
 
-to
+thành
 
-```
+```bash
 server: https://<ip-master1>:6443
 ```
 
@@ -184,17 +181,17 @@ Output:
   <img src="assets\step8.png" alt="step8.png" width="600"/>
 </p>
 
-## 9. Verify Installation
+## 9. Kết quả
 
-On Ansible Node:
+Trên node `ansible`:
 
-```
+```bash
 export KUBECONFIG=k8s-config.yaml
 ```
 
-then
+sau đó
 
-```
+```bash
 kubectl get nodes -o wide
 ```
 
@@ -204,9 +201,9 @@ output:
   <img src="assets\step9-1.png" alt="step9-1.png" width="600"/>
 </p>
 
-and
+và
 
-```
+```bash
 kubectl get pods -A -o wide
 ```
 
@@ -222,4 +219,4 @@ output:
 
 1. 🔗 [Kubespray](https://kubespray.io)
 2. 📖 [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
-3. 📄 Installation documents của mentor Nguyễn Ngọc Dũng
+3. 📄 Tài liệu cài đặt của mentor Nguyễn Ngọc Dũng
