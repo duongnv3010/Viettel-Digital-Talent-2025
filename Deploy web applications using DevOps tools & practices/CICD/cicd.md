@@ -48,6 +48,7 @@ Báo cáo này mô tả quá trình thiết lập luồng CI/CD cho ứng dụng
 - Build image cho phần backend và frontend, sau đó push lên Dockerhub với tên lần lượt là duong3010/be-image:v1.0 và duong3010/fe-image:v1.0
 - Sử dụng Kaniko để build image trực tiếp trong K8s.
 - Đưa thông tin DockerHub credentials vào K8s bằng Secret:
+
   ```bash
   kubectl create secret generic dockerhub-credentials \
     --from-file=.dockerconfigjson=/home/youruser/.docker/config.json \
@@ -128,7 +129,7 @@ Báo cáo này mô tả quá trình thiết lập luồng CI/CD cho ứng dụng
 
 1. **Edit code, push code, tạo tag mới trên repo source.**
 
-- Edit title ở code frontend từ "Student Management" thành "Student Management k8s".
+- Edit title ở code frontend từ `Student Management` thành `Student Management k8s`.
 
 <p align="center">
   <img src="assets\edit-title-fe.png" alt="edit-title-fe.png" width="800"/>
