@@ -24,6 +24,12 @@ https://github.com/duongnv3010/VDT-App
 
 App gồm 2 phần Frontend (FE) và Backend (BE). Trong đó, FE được viết bằng HTML, CSS, Javascript, phần BE được viết bằng NodeJS.
 
+Database được đã deploy lên cụm k8s và expose NodePort `30006` để sử dụng.
+
+<p align="center">
+  <img src="assets\database-k8s.png" alt="database-k8s.png" width="800"/>
+</p>
+
 - Tạo Dockerfile cho phần BE:
 
 ```

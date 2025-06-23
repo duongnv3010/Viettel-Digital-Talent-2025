@@ -34,7 +34,7 @@ ssh-keygen -t rsa
 output:
 
 <p align="center">
-  <img src="assets\step2-1.png" alt="step2-1.png" width="600"/>
+  <img src="assets\step2-1.png" alt="step2-1.png" width="800"/>
 </p>
 
 2. Copy key đến các node còn lại
@@ -52,17 +52,17 @@ Output:
 </p>
 
 <p align="center">
-  <img src="assets\step2-3.png" alt="step2-3.png" width="600"/>
+  <img src="assets\step2-3.png" alt="step2-3.png" width="800"/>
 </p>
 
 3. Test SSH
 
 <p align="center">
-  <img src="assets\step2-4.png" alt="step2-4.png" width="600"/>
+  <img src="assets\step2-4.png" alt="step2-4.png" width="800"/>
 </p>
 
 <p align="center">
-  <img src="assets\step2-5.png" alt="step2-5.png" width="600"/>
+  <img src="assets\step2-5.png" alt="step2-5.png" width="800"/>
 </p>
 
 ## 3. Get Kubespray
@@ -76,7 +76,7 @@ cd kubespray
 Output:
 
 <p align="center">
-  <img src="assets\step3.png" alt="step3.png" width="600"/>
+  <img src="assets\step3.png" alt="step3.png" width="800"/>
 </p>
 
 ## 4. Chạy cài đặt Kubespray
@@ -93,7 +93,7 @@ docker run --rm -it \
 output:
 
 <p align="center">
-  <img src="assets\step4.png" alt="step4.png" width="600"/>
+  <img src="assets\step4.png" alt="step4.png" width="800"/>
 </p>
 
 ## 5. Sửa inventory file
@@ -122,7 +122,7 @@ kube_node
 Output:
 
 <p align="center">
-  <img src="assets\step5.png" alt="step5.png" width="600"/>
+  <img src="assets\step5.png" alt="step5.png" width="800"/>
 </p>
 
 ## 6. Chạy Ansible Playbook
@@ -139,7 +139,7 @@ Không có tác vụ nào kết thúc bằng `FAILED`. Nếu có thấy lỗi, h
 Output:
 
 <p align="center">
-  <img src="assets\step6.png" alt="step6.png" width="600"/>
+  <img src="assets\step6.png" alt="step6.png" width="800"/>
 </p>
 
 ## 7. Cài đặt Kubectl trên Ansible Node
@@ -152,7 +152,7 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 Output:
 
 <p align="center">
-  <img src="assets\step7.png" alt="step7.png" width="600"/>
+  <img src="assets\step7.png" alt="step7.png" width="800"/>
 </p>
 
 ## 8. Kubeconfig configuration
@@ -178,7 +178,7 @@ server: https://<ip-master1>:6443
 Output:
 
 <p align="center">
-  <img src="assets\step8.png" alt="step8.png" width="600"/>
+  <img src="assets\step8.png" alt="step8.png" width="800"/>
 </p>
 
 ## 9. Kết quả
@@ -198,7 +198,7 @@ kubectl get nodes -o wide
 output:
 
 <p align="center">
-  <img src="assets\step9-1.png" alt="step9-1.png" width="600"/>
+  <img src="assets\step9-1.png" alt="step9-1.png" width="800"/>
 </p>
 
 và
@@ -210,7 +210,7 @@ kubectl get pods -A -o wide
 output:
 
 <p align="center">
-  <img src="assets\step9-2.png" alt="step9-2.png" width="600"/>
+  <img src="assets\step9-2.png" alt="step9-2.png" width="800"/>
 </p>
 
 # Reference
