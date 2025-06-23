@@ -16,13 +16,13 @@
 
 - Cài đặt các gói cần thiết
 
-```
+```bash
 npm install prom-client express-prom-bundle
 ```
 
 - Thêm code sau vào file be.js trong repo Source code
 
-```
+```js
 // --- PROMETHEUS METRICS ---
 const client = require("prom-client");
 const promBundle = require("express-prom-bundle");
@@ -35,27 +35,27 @@ const metricsMiddleware = promBundle({
   includeMethod: true,
   includePath: true,
   includeStatusCode: true,
-  promClient: { collectDefaultMetrics: false }
+  promClient: { collectDefaultMetrics: false },
 });
 app.use(metricsMiddleware);
 
 // 2.3. Custom DB query metrics
 const dbQueryCounter = new client.Counter({
-  name: 'db_query_total',
-  help: 'Số lần query tới database',
-  labelNames: ['operation', 'table']
+  name: "db_query_total",
+  help: "Số lần query tới database",
+  labelNames: ["operation", "table"],
 });
 
 // 2.4. Custom business metric: đăng ký user
 const userRegisterCounter = new client.Counter({
-  name: 'user_register_total',
-  help: 'Số user đã đăng ký thành công'
+  name: "user_register_total",
+  help: "Số user đã đăng ký thành công",
 });
 
 // 2.5. Custom business metric: student created
 const studentCreatedCounter = new client.Counter({
-  name: 'student_created_total',
-  help: 'Số student đã tạo thành công'
+  name: "student_created_total",
+  help: "Số student đã tạo thành công",
 });
 ```
 
@@ -63,56 +63,53 @@ const studentCreatedCounter = new client.Counter({
 
   - Trong endpoint **/signup**
 
-  ```
+  ```js
   // Đếm query vào bảng user khi đăng ký
   await pool.query("INSERT INTO user (username, password) VALUES (?, ?)", [
     username,
     hashed,
   ]);
-  dbQueryCounter.inc({ operation: 'insert', table: 'user' });
+  dbQueryCounter.inc({ operation: "insert", table: "user" });
   userRegisterCounter.inc(); // đếm số user đăng ký thành công
-
   ```
 
   - Trong endpoint **get students**
 
-  ```
-    const [rows] = await pool.query(
-        "SELECT id, name, dob, school FROM student"
-    );
-    dbQueryCounter.inc({ operation: 'select', table: 'student' });
+  ```js
+  const [rows] = await pool.query("SELECT id, name, dob, school FROM student");
+  dbQueryCounter.inc({ operation: "select", table: "student" });
   ```
 
   - Trong endpoint **create students**
 
-  ```
-    const [result] = await pool.query(
-        "INSERT INTO student (name, dob, school) VALUES (?, ?, ?)",
-        [name, dob, school]
-    );
-    dbQueryCounter.inc({ operation: 'insert', table: 'student' });
-    studentCreatedCounter.inc();
+  ```js
+  const [result] = await pool.query(
+    "INSERT INTO student (name, dob, school) VALUES (?, ?, ?)",
+    [name, dob, school]
+  );
+  dbQueryCounter.inc({ operation: "insert", table: "student" });
+  studentCreatedCounter.inc();
   ```
 
   - Trong endpoint **delete students**
 
-  ```
-    const [result] = await pool.query("DELETE FROM student WHERE id = ?", [id]);
-    dbQueryCounter.inc({ operation: 'delete', table: 'student' });
+  ```js
+  const [result] = await pool.query("DELETE FROM student WHERE id = ?", [id]);
+  dbQueryCounter.inc({ operation: "delete", table: "student" });
   ```
 
 - Thêm counter cho các endpoint khác, ví dụ đếm số lần đăng nhập lỗi:
 
-```
+```js
 const loginFailCounter = new client.Counter({
-  name: 'login_failed_total',
-  help: 'Số lần đăng nhập thất bại'
+  name: "login_failed_total",
+  help: "Số lần đăng nhập thất bại",
 });
 ```
 
 Và trong login:
 
-```
+```js
 if (!match) {
   loginFailCounter.inc();
   return res.status(401).json({ message: "Invalid credentials" });
@@ -121,9 +118,9 @@ if (!match) {
 
 - Thêm endpoint expose metrics cho Prometheus (ở cuối file, trước app.listen)
 
-```
-app.get('/metrics', async (req, res) => {
-  res.set('Content-Type', client.register.contentType);
+```js
+app.get("/metrics", async (req, res) => {
+  res.set("Content-Type", client.register.contentType);
   res.end(await client.register.metrics());
 });
 ```
@@ -146,7 +143,7 @@ app.get('/metrics', async (req, res) => {
 
 - Cấu trúc thư mục monitoring:
 
-```
+```bash
 monitoring/
 ├── prometheus-configmap.yaml
 ├── prometheus-deployment.yaml
@@ -157,7 +154,7 @@ monitoring/
 
 - file prometheus-configmap.yaml
 
-```
+```yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -176,7 +173,7 @@ data:
 
 - file prometheus-deployment.yaml
 
-```
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -210,7 +207,7 @@ spec:
 
 - file prometheus-service.yaml
 
-```
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -224,12 +221,11 @@ spec:
       nodePort: 30900
   selector:
     app: prometheus
-
 ```
 
 - file prometheus-k8s-playbook.yaml
 
-```
+```yaml
 - name: Deploy Prometheus to Kubernetes cluster
   hosts: localhost
   connection: local
@@ -261,14 +257,14 @@ spec:
 
 - Cài thêm một số gói cần thiết:
 
-```
+```bash
 sudo apt update
 sudo apt install python3-kubernetes python3-openshift -y
 ```
 
 - Chạy lại playbook
 
-```
+```bash
 ansible-playbook prometheus-k8s-playbook.yaml
 ```
 
